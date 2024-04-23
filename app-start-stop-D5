@@ -85,7 +85,6 @@ pipeline {
 					}      
 				}
 				stage('Phantom') {
-					}
 					steps {
 						script{
 							println Phantom_Server
