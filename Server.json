@@ -61,7 +61,7 @@
 		"api-smartsheet-uploader",
 		"api-smartsheet-context-graphql"
 
-	]
+	],
 	"MHT_CONFIG_API":[
 		"api-mobilehandofftoken", 
 		"api-config-server"
