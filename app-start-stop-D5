@@ -104,8 +104,6 @@ pipeline {
 		spaceName: 'MamtaKT']]*/
 	}
 } 
-	
-}
 def appStartStop(String appName, Object server, String action){
 	for(s in server) {
 		def SSH_OPTION="ssh -q jenkins_worker@${s} -o StrictHostKeyChecking=no"
