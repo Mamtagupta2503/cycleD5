@@ -1,33 +1,33 @@
  {
-    "ABC": [
-		"A"
+    "mobilehandofftoken_Config_Server": [
+		"vm0dnoobfsa0002"
     ],
-    "XYZ": [
-		"B",
-		"C"		
+    "Sali_Smartsheet_Server": [
+		"vm0dnoobsxa0002",
+		"vm0dnoobfsa0003"		
     ],
-    "QWE": [
-		"D",
-		"E"
+    "Service_Router_Server": [
+		"vm0dnoobfsw0001",
+		"vm0dnoobfsw0002"
     ],
-	"QAZ": [
-		"F",
-		"H",
-		"G"
+	"Haproxy_Server": [
+		"vm0unoobsxw0001",
+		"vm0pnaemxxw0030",
+		"vm0dnaemxxw0030"
 
     ],
-    "WSX": [
-		"H"
+    "SOM_Server": [
+		"vm0unsomlxa0005"
     ],
-    "EDC": [
-		"I"
+    "Phantom_Server": [
+		"vm0unphntma0006"
     ],	
-    "RFV": [
-		"A",
-		"B-8130",
-		"C-8136",
-		"D-8112",
-		"F-8132",
+    "SOM_API": [
+		"AccountService-8150",
+		"AffiliateService-8130",
+		"AuthenticationService-8136",
+		"BillingService-8112",
+		"CreateLocationService-8132",
 		"CSGLeadAutomationService-8156",
 		"CustomerService-8114",
 		"GlobalLeadManagementProcess-8134",
@@ -45,7 +45,7 @@
 		"SOMConfigService-8128",
 		"TMSLeadMgmtService-8144"
 	],
-	"TGB":[
+	"SALI_SMARTSHEET_API":[
 		"splunkd",
 		"api-serviceability",
 		"api-serviceability-camunda-bpm",
@@ -59,11 +59,11 @@
 		"api-smartsheet-context-graphql"
 
 	],
-	"THN":[
-		"api-mobilehandofftoken", 
+	"MHT_CONFIG_API":[
+		"api-mobilehandofftoken",
 		"api-config-server"
 	],
-	"YHN":[
+	"SR_API":[
 		"splunkd",
 		"service-router"
 	]
