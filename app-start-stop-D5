@@ -51,7 +51,7 @@ pipeline {
 				stage('mobilehandofftoken and Config') {
 					steps {
 						script{
-							def result =ActionOnMultpileApi(mobilehandofftoken_Config_Server, SALI_SMARTSHEET_API, action)
+							def result =ActionOnMultpileApi(mobilehandofftoken_Config_Server, MHT_CONFIG_API, action)
 							
 						}
 					}      
@@ -59,14 +59,14 @@ pipeline {
 				stage('SALI and Smarsheet') {
 					steps {
 						script{
-							def result =ActionOnMultpileApi(Sali_Smartsheet_Server, MHT_CONFIG_API, action)
+							def result =ActionOnMultpileApi(Sali_Smartsheet_Server, SALI_SMARTSHEET_API, action)
 						}
 					}      
 				}
 				stage('Service Router') {
 					steps {
 						script{
-							def result =ActionOnMultpileApi(Sali_Smartsheet_Server, MHT_CONFIG_API, action)
+							def result =ActionOnMultpileApi(Sali_Smartsheet_Server, SR_API, action)
 						}
 					}      
 				}
