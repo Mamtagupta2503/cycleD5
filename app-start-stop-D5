@@ -110,7 +110,7 @@ def ActionOnMultpileApi(Object server, Object api, String action ){
 	def result ='Success'
 	def sshOption="-i ${JENKINS_HOME}/.ssh/id_jenkins_worker_rsa -o StrictHostKeyChecking=no"
 	for(s in server) {
-		sshCommandLine="ssh ${sshOption} jenkins_worker@${s}"
+		def sshCommandLine="ssh ${sshOption} jenkins_worker@${s}"
 		for(a in api) 
 		{
 			println "$sshCommandLine sudo service ${a} ${action}" 
