@@ -104,14 +104,6 @@ pipeline {
 		}
 	}
 }	
-def appStartStop(String appName, Object server, String action){
-	for(s in server) {
-		def SSH_OPTION="ssh -q jenkins_worker@${s} -o StrictHostKeyChecking=no"
-		echo "command $SSH_OPTION sudo su - oosuser  '/data/apps/${appName}/bin/app-${action}.sh'" 
-		//sh "$SSH_OPTION sudo su - oosuser  '/data/apps/${appName}/bin/app-${action}.sh'"	
-	}
-}
-
 def ActionOnMultpileApi(Object server, Object api, String action ){
 	def result ='Success'
 	def sshOption="-i ${JENKINS_HOME}/.ssh/id_jenkins_worker_rsa -o StrictHostKeyChecking=no"
@@ -134,11 +126,4 @@ def ActionOnMultpileApi(Object server, Object api, String action ){
 		}
 	}
 	return result
-}
-def haproxyStartStop(String appName, Object server, String action){
-	for(s in server) {
-		def SSH_OPTION="ssh -q jenkins_worker@${s} -o StrictHostKeyChecking=no"
-		echo "command $SSH_OPTION sudo su - oosuser  '/data/apps/${appName}/bin/app-${action}.sh'" 
-		//sh "$SSH_OPTION sudo su - oosuser  '/data/apps/${appName}/bin/app-${action}.sh'"	
-	}
 }
