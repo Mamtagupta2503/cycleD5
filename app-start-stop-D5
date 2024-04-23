@@ -103,7 +103,7 @@ pipeline {
 			spaceName: 'MamtaKT']]*/
 			}
 		}
-	}
+
 }	
 def ActionOnMultpileApi(Object server, Object api, String action ){
 	def result ='Success'
