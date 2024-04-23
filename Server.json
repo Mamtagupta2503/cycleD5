@@ -47,6 +47,20 @@
 		"SOMAPIService-8140",
 		"SOMConfigService-8128",
 		"TMSLeadMgmtService-8144"
+	],
+	"SALI_SMARTSHEET_API":[
+		"splunkd",
+		"api-serviceability",
+		"api-serviceability-camunda-bpm",
+		"api-serviceability-content",
+		"api-serviceability-context",
+		"api-serviceability-context-wrapper",
+		"api-serviceability-mobile-eligibility",
+		"api-smartsheet-context",
+		"api-smartsheet-wrapper",
+		"api-smartsheet-uploader",
+		"api-smartsheet-context-graphql"
+
 	]
 
 }
