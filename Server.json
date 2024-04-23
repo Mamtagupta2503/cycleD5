@@ -1,25 +1,25 @@
  {
-    "mobilehandofftoken_Config_Server": [
+    "CONFIG_MHT_SERVERS": [
 		"vm0dnoobfsa0002"
     ],
-    "Sali_Smartsheet_Server": [
+    "SALI_SMRTSHT_SERVER": [
 		"vm0dnoobsxa0002",
 		"vm0dnoobfsa0003"		
     ],
-    "Service_Router_Server": [
+    "SR_SERVERS": [
 		"vm0dnoobfsw0001",
 		"vm0dnoobfsw0002"
     ],
-	"Haproxy_Server": [
+	"HAPROXY_SERVERSS": [
 		"vm0unoobsxw0001",
 		"vm0pnaemxxw0030",
 		"vm0dnaemxxw0030"
 
     ],
-    "SOM_Server": [
+    "SOM_SERVERS": [
 		"vm0unsomlxa0005"
     ],
-    "Phantom_Server": [
+    "PHANTOM_SERVERS": [
 		"vm0unphntma0006"
     ],	
     "SOM_API": [
