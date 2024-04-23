@@ -22,10 +22,7 @@
 	   "Phantom_Server": [
 		"vm0unphntma0006"
     ],
-    "BACKEND": [
-        "www-svc-api-v2"
-    ],
-	  "SOM_API": [
+	"SOM_API": [
 		"AccountService-8150",
 		"AffiliateService-8130",
 		"AuthenticationService-8136",
