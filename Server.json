@@ -1,55 +1,73 @@
-{
-    "HAPROXY_SERVERS": [
-     "omega-haproxy1-prod.nce.webapps.rr.com",
-     "omega-haproxy2-prod.nce.webapps.rr.com",
-     "omega-haproxy1-prod.ncw.webapps.rr.com",
-     "omega-haproxy2-prod.ncw.webapps.rr.com"
+ {
+    "ABC": [
+		"A"
     ],
-	"HA_NCE_SERVERS": [
-	"sr7-prod.nce.corp.chartercom.com",
-    "sr8-prod.nce.corp.chartercom.com",
-	"sr9-prod.nce.corp.chartercom.com",
-	"sr10-prod.nce.corp.chartercom.com"
+    "XYZ": [
+		"B",
+		"C"		
     ],
-	"HA_NCW_SERVERS": [
-	"sr7-prod.ncw.corp.chartercom.com",
-    "sr8-prod.ncw.corp.chartercom.com",
-	"sr9-prod.ncw.corp.chartercom.com",
-	"sr10-prod.ncw.corp.chartercom.com"
+    "QWE": [
+		"D",
+		"E"
     ],
-  
-    "NCESERVERS": [
-	"api5-prod.nce.webapps.rr.com",
-    "api6-prod.nce.webapps.rr.com",
-	"api7-prod.nce.webapps.rr.com",
-	"api8-prod.nce.webapps.rr.com",
-	"api9-prod.nce.webapps.rr.com",
-	"api31-prod.nce.corp.chartercom.com",
-	"api32-prod.nce.corp.chartercom.com"
-    ],
-    "NCWSERVERS": [
-	"api5-prod.ncw.webapps.rr.com",
-    "api6-prod.ncw.webapps.rr.com",
-	"api7-prod.ncw.webapps.rr.com",
-	"api8-prod.ncw.webapps.rr.com",
-	"api9-prod.ncw.webapps.rr.com",
-	"api31-prod.ncw.corp.chartercom.com",
-	"api32-prod.ncw.corp.chartercom.com"
-    ],
-	
-    "BACKEND": [
-        "www-svc-api-v2"
-    ],
-	"API" : [
-	    "api-serviceability-context",
-		"api-serviceability-content",
-		"api-serviceability-camunda-bpm",
-		"api-serviceability",
-		"api-serviceability-context-wrapper",
-		"api-serviceability-mobilie-eligibility"
-	],
-    "SOCKFILE": "/var/lib/haproxy/stats",
-	
-	"DIRECTORY": "/home/oosuser/deployment-scripts/scripts"
+	"QAZ": [
+		"F",
+		"H",
+		"G"
 
+    ],
+    "WSX": [
+		"H"
+    ],
+    "EDC": [
+		"I"
+    ],	
+    "RFV": [
+		"A",
+		"B-8130",
+		"C-8136",
+		"D-8112",
+		"F-8132",
+		"CSGLeadAutomationService-8156",
+		"CustomerService-8114",
+		"GlobalLeadManagementProcess-8134",
+		"LeadHistoryService-8120",
+		"JSONAdapterService-8110",
+		"MDAProcessorService-8142",
+		"MobileTokenService-8154",
+		"OrderDetailsService-8122",
+		"ProductService-8124",
+		"ProgramDetailsService-8138",
+		"SchedulingService-8126",
+		"SearchOrderService-8148",
+		"SubmitLeadService-8160",
+		"SOMAPIService-8140",
+		"SOMConfigService-8128",
+		"TMSLeadMgmtService-8144"
+	],
+	"TGB":[
+		"splunkd",
+		"api-serviceability",
+		"api-serviceability-camunda-bpm",
+		"api-serviceability-content",
+		"api-serviceability-context",
+		"api-serviceability-context-wrapper",
+		"api-serviceability-mobile-eligibility",
+		"api-smartsheet-context",
+		"api-smartsheet-wrapper",
+		"api-smartsheet-uploader",
+		"api-smartsheet-context-graphql"
+
+	],
+	"THN":[
+		"api-mobilehandofftoken", 
+		"api-config-server"
+	],
+	"YHN":[
+		"splunkd",
+		"service-router"
+	]
+	
 }
+
+ 
