@@ -1,73 +1,40 @@
- {
+{
     "CONFIG_MHT_SERVERS": [
-		"vm0dnoobfsa0002"
+     "vm0dnoobfsa0002"
     ],
-    "SALI_SMRTSHT_SERVER": [
-		"vm0dnoobsxa0002",
-		"vm0dnoobfsa0003"		
+	"SALI_SMRTSHT_SERVER": [
+	"vm0dnoobsxa0002",
+    "vm0dnoobfsa0003"
     ],
-    "SR_SERVERS": [
-		"vm0dnoobfsw0001",
-		"vm0dnoobfsw0002"
+	"SR_SERVERS": [
+	"vm0dnoobfsw0001",
+    "vm0dnoobfsw0002"
     ],
-	"HAPROXY_SERVERSS": [
-		"vm0unoobsxw0001",
-		"vm0pnaemxxw0030",
-		"vm0dnaemxxw0030"
-
+  
+    "HAPROXY_SERVERS": [
+	"vm0unoobsxw0001",
+    "vm0pnaemxxw0030",
+	"vm0dnaemxxw0030"
     ],
     "SOM_SERVERS": [
-		"vm0unsomlxa0005"
+	"vm0unsomlxa0005"
     ],
-    "PHANTOM_SERVERS": [
+	   "PHANTOM_SERVERS": [
 		"vm0unphntma0006"
-    ],	
-    "SOM_API": [
-		"AccountService-8150",
-		"AffiliateService-8130",
-		"AuthenticationService-8136",
-		"BillingService-8112",
-		"CreateLocationService-8132",
-		"CSGLeadAutomationService-8156",
-		"CustomerService-8114",
-		"GlobalLeadManagementProcess-8134",
-		"LeadHistoryService-8120",
-		"JSONAdapterService-8110",
-		"MDAProcessorService-8142",
-		"MobileTokenService-8154",
-		"OrderDetailsService-8122",
-		"ProductService-8124",
-		"ProgramDetailsService-8138",
-		"SchedulingService-8126",
-		"SearchOrderService-8148",
-		"SubmitLeadService-8160",
-		"SOMAPIService-8140",
-		"SOMConfigService-8128",
-		"TMSLeadMgmtService-8144"
-	],
-	"SALI_SMARTSHEET_API":[
-		"splunkd",
-		"api-serviceability",
-		"api-serviceability-camunda-bpm",
+    ],
+    "BACKEND": [
+        "www-svc-api-v2"
+    ],
+	"API" : [
+	    "api-serviceability-context",
 		"api-serviceability-content",
-		"api-serviceability-context",
+		"api-serviceability-camunda-bpm",
+		"api-serviceability",
 		"api-serviceability-context-wrapper",
-		"api-serviceability-mobile-eligibility",
-		"api-smartsheet-context",
-		"api-smartsheet-wrapper",
-		"api-smartsheet-uploader",
-		"api-smartsheet-context-graphql"
-
+		"api-serviceability-mobilie-eligibility"
 	],
-	"MHT_CONFIG_API":[
-		"api-mobilehandofftoken",
-		"api-config-server"
-	],
-	"SR_API":[
-		"splunkd",
-		"service-router"
-	]
+    "SOCKFILE": "/var/lib/haproxy/stats",
 	
-}
+	"DIRECTORY": "/home/oosuser/deployment-scripts/scripts"
 
- 
+}
