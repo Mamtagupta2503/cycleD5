@@ -1,0 +1,71 @@
+ {
+    "mobilehandofftoken_Config_Server": [
+		"vm0dnoobfsa0002"
+    ],
+    "Sali_Smartsheet_Server": [
+		"vm0dnoobsxa0002",
+		"vm0dnoobfsa0003"		
+    ],
+    "Service_Router_Server": [
+		"vm0dnoobfsw0001",
+		"vm0dnoobfsw0002"
+    ],
+	"Haproxy_Server": [
+		"vm0unoobsxw0001",
+		"vm0pnaemxxw0030",
+		"vm0dnaemxxw0030"
+
+    ],
+    "SOM_Server": [
+		"vm0unsomlxa0005"
+    ],
+    "Phantom_Server": [
+		"vm0unphntma0006"
+    ],	
+    "SOM_API": [
+		"AccountService-8150",
+		"AffiliateService-8130",
+		"AuthenticationService-8136",
+		"BillingService-8112",
+		"CreateLocationService-8132",
+		"CSGLeadAutomationService-8156",
+		"CustomerService-8114",
+		"GlobalLeadManagementProcess-8134",
+		"LeadHistoryService-8120",
+		"JSONAdapterService-8110",
+		"MDAProcessorService-8142",
+		"MobileTokenService-8154",
+		"OrderDetailsService-8122",
+		"ProductService-8124",
+		"ProgramDetailsService-8138",
+		"SchedulingService-8126",
+		"SearchOrderService-8148",
+		"SubmitLeadService-8160",
+		"SOMAPIService-8140",
+		"SOMConfigService-8128",
+		"TMSLeadMgmtService-8144"
+	],
+	"SALI_SMARTSHEET_API":[
+		"splunkd",
+		"api-serviceability",
+		"api-serviceability-camunda-bpm",
+		"api-serviceability-content",
+		"api-serviceability-context",
+		"api-serviceability-context-wrapper",
+		"api-serviceability-mobile-eligibility",
+		"api-smartsheet-context",
+		"api-smartsheet-wrapper",
+		"api-smartsheet-uploader",
+		"api-smartsheet-context-graphql"
+
+	],
+	"MHT_CONFIG_API":[
+		"api-mobilehandofftoken", 
+		"api-config-server"
+	],
+	"SR_API":[
+		"splunkd",
+		"service-router"
+	]
+	
+}
