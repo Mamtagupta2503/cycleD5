@@ -62,5 +62,13 @@
 		"api-smartsheet-context-graphql"
 
 	]
+	"MHT_CONFIG_API":[
+		"api-mobilehandofftoken", 
+		"api-config-server"
+	],
+	"SR_API":[
+		"splunkd",
+		"service-router"
+	]
 
 }
