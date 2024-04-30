@@ -1,125 +1,273 @@
 def action =params.Action
-def publishResults=''
+def application =params.Application
+def publishresults='' 
 def cause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
-def ServerFromFile
-def mobilehandofftoken_Config_Server
-def Sali_Smartsheet_Server =''
-def Service_Router_Server =''
-def Haproxy_Server =''
-def SOM_Server =''
-def Phantom_Server =''
-def SOM_API =''
-def SALI_SMARTSHEET_API =''
-def MHT_CONFIG_API =''
-def SR_API=''
 
 
 pipeline {
     agent any
 
     stages {
-		stage('Server Details'){
-			steps {
-				script{
-					println "Fetching data from bitbucket"								
-					ServerFromFile = readJSON file: 'Server.json'
-					mobilehandofftoken_Config_Server = ServerFromFile.mobilehandofftoken_Config_Server
-					Sali_Smartsheet_Server = ServerFromFile.Sali_Smartsheet_Server
-					Service_Router_Server =ServerFromFile.Service_Router_Server
-					Haproxy_Server = ServerFromFile.Haproxy_Server
-					SOM_Server =	ServerFromFile.SOM_Server
-					Phantom_Server = ServerFromFile.Phantom_Server
-					SOM_API = ServerFromFile.SOM_API
-					SALI_SMARTSHEET_API = ServerFromFile.SALI_SMARTSHEET_API
-					MHT_CONFIG_API =ServerFromFile.MHT_CONFIG_API
-					SR_API =ServerFromFile.SR_API
-					println "mobilehandofftoken_Config_Server" + mobilehandofftoken_Config_Server
-					println "Sali_Smartsheet_Server" + Sali_Smartsheet_Server
-					println "Service_Router_Server" + Service_Router_Server
-					println "Haproxy_Server" + Haproxy_Server
-					println "SOM_Server" + SOM_Server
-					println "Phantom_Server" + Phantom_Server
-					println "SOM_API" + SOM_API
-					println "SALI_SMARTSHEET_API" + SALI_SMARTSHEET_API
-					println "MHT_CONFIG_API" + MHT_CONFIG_API
-					println "SR_API" + SR_API
-				}	
-			}
-		}	
-		stage('Parallel execution') {
-			parallel {				
-				stage('mobilehandofftoken and Config') {
-					steps {
-						script{
-							def result =ActionOnMultpileApi(mobilehandofftoken_Config_Server, MHT_CONFIG_API, action)
-							
-						}
-					}      
-				}
-				stage('SALI and Smarsheet') {
-					steps {
-						script{
-							def result =ActionOnMultpileApi(Sali_Smartsheet_Server, SALI_SMARTSHEET_API, action)
-						}
-					}      
-				}
-				stage('Service Router') {
-					steps {
-						script{
-							def result =ActionOnMultpileApi(Service_Router_Server, SR_API, action)
-						}
-					}      
-				}
-				stage('Haproxy') {
-					steps {
-						script{
-							println Haproxy_Server
-						}
-					}      
-				}
-				stage('SOM') {
-					steps {
-						script{
-							println SOM_Server
-						}
-					}      
-				}
-				stage('Phantom') {
-					steps {
-						script{
-							println Phantom_Server
-						}
-					}      
-				}				
-			}
-		}
-	}	
-	
-    post {
-		always {
-			println publishResults
-			/*sparkSend credentialsId: 'UnifiedBuyflowSparkBot', 
-			message: " Job URL: ${env.JOB_URL} \n BUILD_NUMBER: ${env.BUILD_NUMBER} \n User: ${cause.userName} \n Application: [${Application}] \n Action: [${action}] \n DC: [${datacenter}] \n Build status: [${currentBuild.currentResult}] \n StageResult: [${publishResults}] ",
-			spaceList: [[spaceId: '21f9d0e0-92b5-11ee-a0f4-6d1d3af5a51f', 
-			spaceName: 'MamtaKT']]*/
-			}
-		}
+        stage('Parallel execution') {
+            parallel {
+				stage('Application: api-mobilehandofftoken') {
+                    when {
+                        expression {
+                            application.contains("api-mobilehandofftoken")
+                            }
+                        }
+                    steps {
+                        script{
+                            try{
+                                println "Performing "+ action +" on application api-mobilehandofftoken"
+                                def serverdetails = readJSON file: 'api-mobilehandofftoken.json'
+								def server = serverdetails.SERVERS
+								
+								//calling ActionOnSingleApi method to perform action on api-config-server
+								def apiConfigResult = ActionOnSingleApi(server,'api-config-server',action)
+								//storing the results in single variable
+								publishresults = publishresults + apiConfigResult
+								//calling ActionOnSingleApi method to perform action on api-mobilehandofftoken
+								def mobilehandofftokenResult = ActionOnSingleApi(server,'api-mobilehandofftoken',action)
+								//storing the results in single variable
+								publishresults = publishresults + mobilehandofftokenResult						
 
-}	
+                            }catch(Exception e) 
+                            {
+                                println "******** ERROR ********"+e
+                                result ='Failure'
+								publishresults = publishresults + "api-mobilehandofftoken" + result+ "\n"
+                                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+								{
+                                    sh "exit 1"
+                                }
+                            } 
+                        }
+                    }
+                }
+                stage('Application: Serviceability') {
+                    when {
+                        expression {
+                  			application.contains("Serviceability")
+                        }
+                    }
+                    steps {
+                        script{
+                            try{
+                                println "Performing "+ action +" on application Serviceability"
+                                def serverdetails = readJSON file: 'Serviceability.json'
+								def sali_Server = serverdetails.SALI_SERVERS
+								def api = serverdetails.SALI_API
+								
+								//calling ActionOnMultpileApi method to perform action on all sali api's 
+								def SaliResult = ActionOnMultpileApi(sali_Server,api,action)
+								//storing the results in single variable
+								publishresults = publishresults + SaliResult
+						
+                            }catch(Exception e) 
+                            {
+                                println "******** ERROR ********"+e
+                                def result ='Failure'
+								publishresults = publishresults + "-" + result+ "\n"
+                                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+								{
+                                    sh "exit 1"
+                                }
+                            }
+             
+                        }
+                    }
+                }
+                stage('Application: Smartsheet') {
+                    when {
+                        expression {
+                            application.contains("Smartsheet")
+                        }
+                    }
+                    steps {
+                        script{
+                            try{    
+                                println "Performing "+ action +" on application Smartsheet"
+                                def serverdetails = readJSON file: 'Smartsheet.json'
+                                def smartsheet_Server = serverdetails.SMARTSHEET_SERVERS
+								def api = serverdetails.SMARTSHEET_API
+								
+								//calling ActionOnMultpileApi method to perform action on all Smartsheet api's 
+								def SmartsheetResult = ActionOnMultpileApi(smartsheet_Server,api,action)
+								//storing the results in single variable publishresults
+								publishresults = publishresults + SmartsheetResult
+                            }catch(Exception e) 
+                            {
+                                println "******** ERROR ********"+e
+                                def result ='Failure'
+								publishresults = publishresults + "-" + result+ "\n"
+                                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+								{
+                                    sh "exit 1"
+                                }
+                            }
+                        }
+                    }
+                }
+                stage('Application: ServiceRouter') {
+                    when {
+                        expression {
+                            application.contains("ServiceRouter")
+                        }
+                        }
+                    steps {
+                        script{
+                            try{    
+                                println "Performing "+ action +" on application ServiceRouter"
+                                def serverdetails = readJSON file: 'ServiceRouter.json'
+								def sr_Server = serverdetails.SR_SERVERS
+								
+								//calling ActionOnMultpileApi method to perform action on SplunkForwarder 
+								def splunkdResult = ActionOnSingleApi(sr_Server,'SplunkForwarder',action)
+								publishresults = publishresults + splunkdResult
+								//calling ActionOnMultpileApi method to perform action on servicerouter
+								def ServiceRouterResult = ActionOnSingleApi(sr_Server,'servicerouter',action)
+								publishresults = publishresults + ServiceRouterResult
+
+                            }catch(Exception e) 
+                            {
+                                println "******** ERROR ********"+e
+                                result ='Failure'
+								publishresults = publishresults + "ServiceRouter" + result+ "\n"
+                                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+								{
+                                    sh "exit 1"
+                                }
+                            }            
+                        }
+                    }
+                }
+ 				stage('Application: haproxy') {
+                    when {
+                        expression {
+                            application.contains("haproxy")
+                            }
+                        }
+                    steps {
+                        script{
+                            try{
+                                println "Performing "+ action +" on application haproxy"
+                                def serverdetails = readJSON file: 'haproxy.json'
+								def haproxyServers = serverdetails.HAPROXY_SERVERS
+								
+								def haproxyResult = ActionOnSingleApi(haproxyServers,'haproxy',action)
+								publishresults = publishresults + haproxyResult
+
+                            }catch(Exception e) 
+                            {
+                                println "******** ERROR ********"+e
+                                result ='Failure'
+								publishresults = publishresults + "haproxy" + result+ "\n"
+                                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+								{
+                                    sh "exit 1"
+                                }
+                            } 
+                        }
+                    }
+                }
+				stage('Application: SOM') {
+                    when {
+                        expression {
+                            application.contains("SOM")
+                            }
+                        }
+                    steps {
+                        script{
+                            try{
+                                println "Performing "+ action +" on application SOM"
+                                def serverdetails = readJSON file: 'SOM.json'
+								def somServer = serverdetails.SOM_SERVERS
+								def somMicroservices =serverdetails.SOM_API
+								
+								def SOMLUIResult =ActionOnSOMLUI(somServer,action)
+								def SOMResult =ActionOnSOM(somServer,action)
+								def SOMMSResult =ActionOnSOMMS(somServer,somMicroservices,action)
+								publishresults = publishresults + SOMLUIResult
+								publishresults = publishresults + SOMResult
+								publishresults = publishresults + SOMMSResult
+								
+                            }catch(Exception e) 
+                            {
+                                println "******** ERROR ********"+e
+                                result ='Failure'
+								publishresults = publishresults + "SOM" + result+ "\n"
+                                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+								{
+                                    sh "exit 1"
+                                }
+                            } 
+                        }
+                    }
+                }
+				stage('Application: Phantom') {
+                    when {
+                        expression {
+                            application.contains("Phantom")
+                            }
+                        }
+                    steps {
+                        script{
+                            try{
+                                println "Performing "+ action +" on application Phantom"
+                                def serverdetails = readJSON file: 'Phantom.json'
+								def PhantomServer = serverdetails.PHANTOM_SERVERS
+								
+								
+								def PhantomResult =ActionOnPhantom(PhantomServer,action)
+								publishresults = publishresults + PhantomResult
+								
+                            }catch(Exception e) 
+                            {
+                                println "******** ERROR ********"+e
+                                result ='Failure'
+								publishresults = publishresults + "Phantom" + result+ "\n"
+                                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+								{
+                                    sh "exit 1"
+                                }
+                            } 
+                        }
+                    }
+                }
+            }
+        }        
+    }
+   post {
+		always {
+			println publishresults
+			sparkSend credentialsId: 'UnifiedBuyflowSparkBot', 
+			message: " Job URL: ${env.JOB_URL} \n BUILD_NUMBER: ${env.BUILD_NUMBER} \n User: ${cause.userName} \n Action: [${action}] \n Results: [${publishresults}] ",
+			spaceList: [[spaceId: '21f9d0e0-92b5-11ee-a0f4-6d1d3af5a51f', 
+			spaceName: 'MamtaKT']]
+			}
+	}
+}
 def ActionOnMultpileApi(Object server, Object api, String action ){
-	def result ='Success'
-	def sshOption="-i ${JENKINS_HOME}/.ssh/id_jenkins_worker_rsa -o StrictHostKeyChecking=no"
+	def result =''
+	def ActionOnMultpileApiResult =''
+	//def sshOption="-i ${JENKINS_HOME}/.ssh/id_jenkins_worker_rsa -o StrictHostKeyChecking=no"
+	def sshOption="-i /apps/jenkins/.ssh/id_jenkins_worker_rsa -o StrictHostKeyChecking=no -o LogLevel=error"
+	
 	for(s in server) {
 		def sshCommandLine="ssh ${sshOption} jenkins_worker@${s}"
 		for(a in api) 
 		{
-			println "$sshCommandLine sudo service ${a} ${action}" 
+			println "${sshCommandLine} sudo service ${a} ${action}"
 			try{
-				//sh "$sshCommandLine sudo service ${a} ${action}"
+				//sh "${sshCommandLine} sudo service ${a} ${action}"
+				result ='Success'
+				ActionOnMultpileApiResult = ActionOnMultpileApiResult + " " + a + " " + s + "-"+ result + "\n"
 			}catch(Exception e) 
 			{
 				println "******** ERROR ********"+e
 				result ='Failure'
+				ActionOnMultpileApiResult = ActionOnMultpileApiResult + " " + a + " " + s + "-"+ result + "\n"
 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
 				{
 				sh "exit 1"
@@ -127,5 +275,147 @@ def ActionOnMultpileApi(Object server, Object api, String action ){
 			}
 		}
 	}
-	return result
+	return ActionOnMultpileApiResult
+}
+def ActionOnSingleApi(Object server, String api, String action ){
+	def result =''
+	def ActionOnSingleApiResult =''
+	//def sshOption="-i ${JENKINS_HOME}/.ssh/id_jenkins_worker_rsa -o StrictHostKeyChecking=no"
+	def sshOption="-i /apps/jenkins/.ssh/id_jenkins_worker_rsa -o StrictHostKeyChecking=no -o LogLevel=error"
+	for(s in server) {
+		def sshCommandLine="ssh ${sshOption} jenkins_worker@${s}"
+		println "${sshCommandLine} sudo service ${api} ${action}" 
+		try{
+			//sh "${sshCommandLine} sudo service ${api} ${action}"
+			result ='Success'
+			ActionOnSingleApiResult = ActionOnSingleApiResult + " " + api + " " + s + "-"+ result + "\n"
+		}catch(Exception e) 
+		{
+			println "******** ERROR ********"+e
+			result ='Failure'
+			ActionOnSingleApiResult = ActionOnSingleApiResult + " " + api + " " + s + "-"+ result + "\n"
+			catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+			{
+				sh "exit 1"
+			}
+		}
+	}
+	return ActionOnSingleApiResult
+}
+
+def ActionOnSOMLUI(Object server, String action ){
+	def result =''
+	def ActionOnSOMLUIResult =''
+	for(s in server) {
+		def sshCommandLine="ssh -o StrictHostKeyChecking=no svc-soml@${s} -o LogLevel=error"
+		//Action on SOM-LOUI
+		println "${sshCommandLine} /apps/SOML/apache-tomcat-8.5.50/bin/${action}.sh"
+		try{
+			if(action=='stop'){
+				sh "${sshCommandLine} /apps/SOML/apache-tomcat-8.5.50/bin/shutdown.sh"
+			}	
+			else if(action=='start'){
+				sh "${sshCommandLine} /apps/SOML/apache-tomcat-8.5.50/bin/startup.sh"
+			}
+			result ='Success'
+			ActionOnSOMLUIResult = ActionOnSOMLUIResult + " " + s + "-"+ result + "\n"
+		}catch(Exception e) 
+		{
+			println "******** ERROR ********"+e
+			result ='Failure'
+			ActionOnSOMLUIResult = ActionOnSOMLUIResult + " " + s + "-"+ result + "\n"
+			catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+			{
+				sh "exit 1"
+			}
+		}
+	}
+	return ActionOnSOMLUIResult
+}
+
+def ActionOnSOM(Object server, String action ){
+	def result =''
+	def ActionOnSOMResult =''
+	for(s in server) {
+		def sshCommandLine="ssh -o StrictHostKeyChecking=no svc-soml@${s} -o LogLevel=error"
+		println "${sshCommandLine} /apps/SOML/scripts/${action}.sh"
+		try{
+			if(action=='stop'){
+				sh "${sshCommandLine} /apps/SOML/scripts/stopSOM.sh"
+			}	
+			else if(action=='start'){
+				sh "${sshCommandLine} /apps/SOML/scripts/restartSOM.sh"
+			}
+			result ='Success'
+			ActionOnSOMResult = ActionOnSOMResult + " " + s + "-"+ result + "\n"
+		}catch(Exception e) 
+		{
+			println "******** ERROR ********"+e
+			result ='Failure'
+			ActionOnSOMResult = ActionOnSOMResult + " " + s + "-"+ result + "\n"
+			catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+			{
+				sh "exit 1"
+			}
+		}
+	}
+	return ActionOnSOMResult
+}
+
+
+
+def ActionOnSOMMS(Object server, Object api, String action ){
+	def result =''
+	def ActionOnSOMMSResult =''
+	for(s in server) {
+		def sshCommandLine="ssh -o StrictHostKeyChecking=no svc-soml@${s} -o LogLevel=error"
+		for(a in api) 
+		{
+			println "${sshCommandLine} bash -s; /apps/SOML/microservices/${a}/${action}.sh"
+			try{
+				//sh "${sshCommandLine} /apps/SOML/microservices/${a}/${action}.sh"
+				//sh "${sshCommandLine} bash -s; /apps/SOML/microservices/${a}/${action}.sh"
+				result ='Success'
+				ActionOnSOMMSResult = ActionOnSOMMSResult + " " + a + " " + s + "-"+ result + "\n"
+			}catch(Exception e) 
+			{
+				println "******** ERROR ********"+e
+				result ='Failure'
+				ActionOnSOMMSResult = ActionOnSOMMSResult + " " + a + " " + s + "-"+ result + "\n"
+				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+				{
+				sh "exit 1"
+				}
+			}
+		}
+	}
+	return ActionOnSOMMSResult
+}
+def ActionOnPhantom(Object server, String action ){
+	def result =''
+	def ActionOnPhantomResult =''
+	for(s in server) {
+		def sshCommandLine="ssh -o StrictHostKeyChecking=no svc-soml@${s} -o LogLevel=error"
+		println "${sshCommandLine} /apps/PHANTOM/scripts/${action}.sh"
+		try{
+			if(action=='stop'){
+				sh "${sshCommandLine} /apps/PHANTOM/scripts/stopPhantom.sh"
+			}	
+			else if(action=='start'){
+				sh "${sshCommandLine} /apps/PHANTOM/scripts/restartPhantom.sh"
+			}
+			result ='Success'
+			ActionOnPhantomResult = ActionOnPhantomResult + " " + s + "-"+ result + "\n"
+		}catch(Exception e) 
+		{
+			println "******** ERROR ********"+e
+			result ='Failure'
+			ActionOnPhantomResult = ActionOnPhantomResult + " " + s + "-"+ result + "\n"
+			catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+			{
+				sh "exit 1"
+			}
+		}
+	}
+	return ActionOnPhantomResult
 }
