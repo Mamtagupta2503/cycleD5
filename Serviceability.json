@@ -1,0 +1,17 @@
+{  
+    "SALI_SERVERS": [
+		"oob-api1-qa1.ncw.webapps.rr.com",
+		"api1-qa.ncw.webapps.rr.com"
+    ],
+	"SALI_API" : [
+		"SplunkForwarder",
+		"api-serviceability",
+		"api-serviceability-camunda-bpm",
+		"api-serviceability-content",
+	    "api-serviceability-context",
+		"api-serviceability-context-wrapper",
+		"api-serviceability-mobile-eligibility"
+
+	]
+
+}

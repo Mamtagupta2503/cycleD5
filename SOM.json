@@ -1,0 +1,28 @@
+{  
+    "SOM_SERVERS": [
+		"vm0unsomlxa0005"
+    ],
+	"SOM_API": [
+		"AccountService-8150",
+		"AffiliateService-8130",
+		"AuthenticationService-8136",
+		"BillingService-8112",
+		"CreateLocationService-8132",
+		"CSGLeadAutomationService-8156",
+		"CustomerService-8114",
+		"GlobalLeadManagementProcess-8134",
+		"LeadHistoryService-8120",
+		"JSONAdapterService-8110",
+		"MDAProcessorService-8142",
+		"MobileTokenService-8154",
+		"OrderDetailsService-8122",
+		"ProductService-8124",
+		"ProgramDetailsService-8138",
+		"SchedulingService-8126",
+		"SearchOrderService-8148",
+		"SubmitLeadService-8160",
+		"SOMAPIService-8140",
+		"SOMConfigService-8128",
+		"TMSLeadMgmtService-8144"
+]
+}

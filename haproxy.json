@@ -1,0 +1,8 @@
+{  
+    "HAPROXY_SERVERS": [
+		"vm0unoobsxw0001",
+		"vm0pnaemxxw0030",
+		"vm0dnaemxxw0030"
+    ]
+
+}

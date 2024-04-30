@@ -1,0 +1,15 @@
+{  
+	"SMARTSHEET_SERVERS":[
+		"oob-api1-qa1.ncw.webapps.rr.com",
+		"api1-qa.ncw.webapps.rr.com"
+	],
+	
+	"SMARTSHEET_API" : [
+		"SplunkForwarder",
+		"api-smartsheet-context",
+		"api-smartsheet-wrapper",
+		"api-smartsheet-uploader",
+		"api-smartsheet-context-graphql"
+	]
+
+}
