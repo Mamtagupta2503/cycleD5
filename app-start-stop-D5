@@ -239,7 +239,28 @@ pipeline {
                 }
             }
         }        
-    }
+		stage('Retry') {
+			steps {
+				script{
+					try{
+						for(retry in RetryList){
+							println retry
+						}
+						
+					}catch(Exception e) 
+					{
+						println "******** ERROR ********"+e
+						result ='Failure'
+						publishresults = publishresults + "Phantom" + result+ "\n"
+						catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+						{
+							sh "exit 1"
+						}
+					} 
+				}
+			}
+		}
+	}
    post {
 		always {
 			println publishresults
@@ -295,8 +316,6 @@ def ActionOnSingleApi(Object server, String api, String action ){
 		}catch(Exception e) 
 		{
 			RetryList.add("${sshCommandLine} sudo service ${api} ${action}")
-			println "mamta"
-			println "--RetryList---" + RetryList
 			result ='Failure'
 			ActionOnSingleApiResult = ActionOnSingleApiResult + " " + api + " " + s + "-"+ result + "\n"
 			catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
@@ -305,6 +324,7 @@ def ActionOnSingleApi(Object server, String api, String action ){
 			}
 		}
 	}
+	println "--RetryList---" + RetryList
 	return ActionOnSingleApiResult
 }
 
