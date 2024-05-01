@@ -294,7 +294,8 @@ def ActionOnSingleApi(Object server, String api, String action ){
 		}catch(Exception e) 
 		{
 			RetryList.add("${sshCommandLine} sudo service ${api} ${action}")
-			println RetryList
+			println "mamta"
+			println "--RetryList---" + RetryList
 			result ='Failure'
 			ActionOnSingleApiResult = ActionOnSingleApiResult + " " + api + " " + s + "-"+ result + "\n"
 			catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
