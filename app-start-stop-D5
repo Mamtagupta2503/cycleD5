@@ -2,7 +2,8 @@ def action =params.Action
 def application =params.Application
 def publishresults='' 
 def cause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
-def RetryList =[]
+RetryList=[]
+
 
 
 pipeline {
