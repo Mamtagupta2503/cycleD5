@@ -2,6 +2,7 @@ def action =params.Action
 def application =params.Application
 def publishresults='' 
 def cause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+def RetryList =[]
 
 
 pipeline {
@@ -280,7 +281,6 @@ def ActionOnMultpileApi(Object server, Object api, String action ){
 def ActionOnSingleApi(Object server, String api, String action ){
 	def result =''
 	def ActionOnSingleApiResult =''
-	def RetryList =[]
 	//def sshOption="-i ${JENKINS_HOME}/.ssh/id_jenkins_worker_rsa -o StrictHostKeyChecking=no"
 	def sshOption="-i /apps/jenkins/.ssh/id_jenkins_worker_rsa -o StrictHostKeyChecking=no -o LogLevel=error"
 	for(s in server) {
