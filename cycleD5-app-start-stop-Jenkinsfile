@@ -20,11 +20,11 @@ pipeline {
                         script{
                             try{
                                 println "Performing "+ action +" on application api-mobilehandofftoken"
-                                def serverdetails = readJSON file: 'Non-Prod/data/api-mobilehandofftoken.json'
+                                def serverdetails = readJSON file: 'api-mobilehandofftoken.json'
 								def server = serverdetails.SERVERS
 								
 								//calling ActionOnSingleApi method to perform action on api-config-server
-								def apiConfigResult = ActionOnSingleApi(server,'api-config-server',action)
+								def apiConfigResult = ActionOnSingleApi(server,'config-server',action)
 								//storing the results in single variable
 								publishresults = publishresults + apiConfigResult
 								//calling ActionOnSingleApi method to perform action on api-mobilehandofftoken
@@ -55,7 +55,7 @@ pipeline {
                         script{
                             try{
                                 println "Performing "+ action +" on application Serviceability"
-                                def serverdetails = readJSON file: 'Non-Prod/data/Serviceability.json'
+                                def serverdetails = readJSON file: 'Serviceability.json'
 								def sali_Server = serverdetails.SALI_SERVERS
 								def api = serverdetails.SALI_API
 								
@@ -88,7 +88,7 @@ pipeline {
                         script{
                             try{    
                                 println "Performing "+ action +" on application Smartsheet"
-                                def serverdetails = readJSON file: 'Non-Prod/data/Smartsheet.json'
+                                def serverdetails = readJSON file: 'Smartsheet.json'
                                 def smartsheet_Server = serverdetails.SMARTSHEET_SERVERS
 								def api = serverdetails.SMARTSHEET_API
 								
@@ -119,7 +119,7 @@ pipeline {
                         script{
                             try{    
                                 println "Performing "+ action +" on application ServiceRouter"
-                                def serverdetails = readJSON file: 'Non-Prod/data/ServiceRouter.json'
+                                def serverdetails = readJSON file: 'ServiceRouter.json'
 								def sr_Server = serverdetails.SR_SERVERS
 								
 								//calling ActionOnMultpileApi method to perform action on SplunkForwarder 
@@ -152,7 +152,7 @@ pipeline {
                         script{
                             try{
                                 println "Performing "+ action +" on application haproxy"
-                                def serverdetails = readJSON file: 'Non-Prod/data/haproxy.json'
+                                def serverdetails = readJSON file: 'haproxy.json'
 								def haproxyServers = serverdetails.HAPROXY_SERVERS
 								
 								def haproxyResult = ActionOnSingleApi(haproxyServers,'haproxy',action)
@@ -171,6 +171,35 @@ pipeline {
                         }
                     }
                 }
+				stage('Application: SOMLUI') {
+                    when {
+                        expression {
+                            application.contains("SOMLUI")
+                            }
+                        }
+                    steps {
+                        script{
+                            try{
+                                println "Performing "+ action +" on application SOMLUI"
+                                def serverdetails = readJSON file: 'SOM.json'
+								def somServer = serverdetails.SOM_SERVERS
+																
+								def SOMLUIResult =ActionOnSOMLUI(somServer,action)
+								publishresults = publishresults + SOMLUIResult
+								
+                            }catch(Exception e) 
+                            {
+                                println "******** ERROR ********"+e
+                                SOMLUIResult ='Failure'
+								publishresults = publishresults + "SOM" + SOMLUIResult+ "\n"
+                                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+								{
+                                    sh "exit 1"
+                                }
+                            } 
+                        }
+                    }
+                }
 				stage('Application: SOM') {
                     when {
                         expression {
@@ -181,22 +210,47 @@ pipeline {
                         script{
                             try{
                                 println "Performing "+ action +" on application SOM"
-                                def serverdetails = readJSON file: 'Non-Prod/data/SOM.json'
+                                def serverdetails = readJSON file: 'SOM.json'
+								def somServer = serverdetails.SOM_SERVERS
+																
+								def SOMResult =ActionOnSOM(somServer,action)
+								publishresults = publishresults + SOMResult
+								
+                            }catch(Exception e) 
+                            {
+                                println "******** ERROR ********"+e
+                                SOMResult ='Failure'
+								publishresults = publishresults + "SOM" + SOMResult+ "\n"
+                                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
+								{
+                                    sh "exit 1"
+                                }
+                            } 
+                        }
+                    }
+                }
+				stage('Application: SOM-Microservices') {
+                    when {
+                        expression {
+                            application.contains("SOM-MS")
+                            }
+                        }
+                    steps {
+                        script{
+                            try{
+                                println "Performing "+ action +" on application SOM-MS"
+                                def serverdetails = readJSON file: 'SOM.json'
 								def somServer = serverdetails.SOM_SERVERS
 								def somMicroservices =serverdetails.SOM_API
-								
-								def SOMLUIResult =ActionOnSOMLUI(somServer,action)
-								def SOMResult =ActionOnSOM(somServer,action)
+																
 								def SOMMSResult =ActionOnSOMMS(somServer,somMicroservices,action)
-								publishresults = publishresults + SOMLUIResult
-								publishresults = publishresults + SOMResult
 								publishresults = publishresults + SOMMSResult
 								
                             }catch(Exception e) 
                             {
                                 println "******** ERROR ********"+e
-                                result ='Failure'
-								publishresults = publishresults + "SOM" + result+ "\n"
+                                SOMMSResult ='Failure'
+								publishresults = publishresults + "SOM" + SOMMSResult+ "\n"
                                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
 								{
                                     sh "exit 1"
@@ -215,18 +269,17 @@ pipeline {
                         script{
                             try{
                                 println "Performing "+ action +" on application Phantom"
-                                def serverdetails = readJSON file: 'Non-Prod/data/Phantom.json'
-								def PhantomServer = serverdetails.PHANTOM_SERVERS
+                                def serverdetails = readJSON file: 'Phantom.json'
+				def PhantomServer = serverdetails.PHANTOM_SERVERS
 								
-								
-								def PhantomResult =ActionOnPhantom(PhantomServer,action)
-								publishresults = publishresults + PhantomResult
+				def PhantomResult =ActionOnPhantom(PhantomServer,action)
+				publishresults = publishresults + PhantomResult
 								
                             }catch(Exception e) 
                             {
                                 println "******** ERROR ********"+e
-                                result ='Failure'
-								publishresults = publishresults + "Phantom" + result+ "\n"
+                                PhantomResult ='Failure'
+				publishresults = publishresults + "Phantom" + PhantomResult+ "\n"
                                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
 								{
                                     sh "exit 1"
@@ -241,10 +294,10 @@ pipeline {
    post {
 		always {
 			println publishresults
-			sparkSend credentialsId: 'UnifiedBuyflowSparkBot', 
+			/*sparkSend credentialsId: 'UnifiedBuyflowSparkBot', 
 			message: " Job URL: ${env.JOB_URL} \n BUILD_NUMBER: ${env.BUILD_NUMBER} \n User: ${cause.userName} \n Action: [${action}] \n Results: [${publishresults}] ",
 			spaceList: [[spaceId: '21f9d0e0-92b5-11ee-a0f4-6d1d3af5a51f', 
-			spaceName: 'MamtaKT']]
+			spaceName: 'MamtaKT']]*/
 			}
 	}
 }
@@ -260,7 +313,7 @@ def ActionOnMultpileApi(Object server, Object api, String action ){
 		{
 			println "${sshCommandLine} sudo service ${a} ${action}"
 			try{
-				//sh "${sshCommandLine} sudo service ${a} ${action}"
+				sh "${sshCommandLine} sudo service ${a} ${action}"
 				result ='Success'
 				ActionOnMultpileApiResult = ActionOnMultpileApiResult + " " + a + " " + s + "-"+ result + "\n"
 			}catch(Exception e) 
@@ -286,7 +339,7 @@ def ActionOnSingleApi(Object server, String api, String action ){
 		def sshCommandLine="ssh ${sshOption} jenkins_worker@${s}"
 		println "${sshCommandLine} sudo service ${api} ${action}" 
 		try{
-			//sh "${sshCommandLine} sudo service ${api} ${action}"
+			sh "${sshCommandLine} sudo service ${api} ${action}"
 			result ='Success'
 			ActionOnSingleApiResult = ActionOnSingleApiResult + " " + api + " " + s + "-"+ result + "\n"
 		}catch(Exception e) 
@@ -309,13 +362,14 @@ def ActionOnSOMLUI(Object server, String action ){
 	for(s in server) {
 		def sshCommandLine="ssh -o StrictHostKeyChecking=no svc-soml@${s} -o LogLevel=error"
 		//Action on SOM-LOUI
-		println "${sshCommandLine} /apps/SOML/apache-tomcat-8.5.50/bin/${action}.sh"
 		try{
 			if(action=='stop'){
-				sh "${sshCommandLine} /apps/SOML/apache-tomcat-8.5.50/bin/shutdown.sh"
+				println "${sshCommandLine} /apps/SOML/apache-tomcat-8.5.50/bin/shutdown.sh"
+				//sh "${sshCommandLine} /apps/SOML/apache-tomcat-8.5.50/bin/shutdown.sh"
 			}	
 			else if(action=='start'){
-				sh "${sshCommandLine} /apps/SOML/apache-tomcat-8.5.50/bin/startup.sh"
+				println "${sshCommandLine} /apps/SOML/apache-tomcat-8.5.50/bin/startup.sh"
+				//sh "${sshCommandLine} /apps/SOML/apache-tomcat-8.5.50/bin/startup.sh"
 			}
 			result ='Success'
 			ActionOnSOMLUIResult = ActionOnSOMLUIResult + " " + s + "-"+ result + "\n"
@@ -338,13 +392,14 @@ def ActionOnSOM(Object server, String action ){
 	def ActionOnSOMResult =''
 	for(s in server) {
 		def sshCommandLine="ssh -o StrictHostKeyChecking=no svc-soml@${s} -o LogLevel=error"
-		println "${sshCommandLine} /apps/SOML/scripts/${action}.sh"
 		try{
 			if(action=='stop'){
-				sh "${sshCommandLine} /apps/SOML/scripts/stopSOM.sh"
+				println "${sshCommandLine} /apps/SOML/scripts/stopSOM.sh"
+				//sh "${sshCommandLine} /apps/SOML/scripts/stopSOM.sh"
 			}	
 			else if(action=='start'){
-				sh "${sshCommandLine} /apps/SOML/scripts/restartSOM.sh"
+				println "${sshCommandLine} /apps/SOML/scripts/restartSOM.sh"
+				//sh "${sshCommandLine} /apps/SOML/scripts/restartSOM.sh"
 			}
 			result ='Success'
 			ActionOnSOMResult = ActionOnSOMResult + " " + s + "-"+ result + "\n"
@@ -364,17 +419,18 @@ def ActionOnSOM(Object server, String action ){
 
 
 
-def ActionOnSOMMS(Object server, Object api, String action ){
+def ActionOnSOMMS(Object server, Object microservices, String action ){
 	def result =''
 	def ActionOnSOMMSResult =''
 	for(s in server) {
 		def sshCommandLine="ssh -o StrictHostKeyChecking=no svc-soml@${s} -o LogLevel=error"
-		for(a in api) 
+		for(ms in microservices) 
 		{
-			println "${sshCommandLine} bash -s; /apps/SOML/microservices/${a}/${action}.sh"
+			//println "${sshCommandLine} bash -s; /apps/SOML/microservices/${ms}/${action}.sh"
 			try{
-				//sh "${sshCommandLine} /apps/SOML/microservices/${a}/${action}.sh"
-				//sh "${sshCommandLine} bash -s; /apps/SOML/microservices/${a}/${action}.sh"
+				println "${sshCommandLine} /apps/SOML/microservices/${ms}/${action}.sh"
+				//sh "${sshCommandLine} /apps/SOML/microservices/${ms}/${action}.sh"
+				//sh "${sshCommandLine} bash -s; /apps/SOML/microservices/${ms}/${action}.sh"
 				result ='Success'
 				ActionOnSOMMSResult = ActionOnSOMMSResult + " " + a + " " + s + "-"+ result + "\n"
 			}catch(Exception e) 
@@ -399,10 +455,12 @@ def ActionOnPhantom(Object server, String action ){
 		println "${sshCommandLine} /apps/PHANTOM/scripts/${action}.sh"
 		try{
 			if(action=='stop'){
-				sh "${sshCommandLine} /apps/PHANTOM/scripts/stopPhantom.sh"
+				println "${sshCommandLine} /apps/PHANTOM/scripts/stopPhantom.sh"
+				//sh "${sshCommandLine} /apps/PHANTOM/scripts/stopPhantom.sh"
 			}	
 			else if(action=='start'){
-				sh "${sshCommandLine} /apps/PHANTOM/scripts/restartPhantom.sh"
+				println "${sshCommandLine} /apps/PHANTOM/scripts/restartPhantom.sh"
+				//sh "${sshCommandLine} /apps/PHANTOM/scripts/restartPhantom.sh"
 			}
 			result ='Success'
 			ActionOnPhantomResult = ActionOnPhantomResult + " " + s + "-"+ result + "\n"
