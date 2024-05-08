@@ -313,7 +313,7 @@ def ActionOnMultpileApi(Object server, Object api, String action ){
 		{
 			println "${sshCommandLine} sudo service ${a} ${action}"
 			try{
-				sh "${sshCommandLine} sudo service ${a} ${action}"
+				//sh "${sshCommandLine} sudo service ${a} ${action}"
 				result ='Success'
 				ActionOnMultpileApiResult = ActionOnMultpileApiResult + " " + a + " " + s + "-"+ result + "\n"
 			}catch(Exception e) 
@@ -339,7 +339,7 @@ def ActionOnSingleApi(Object server, String api, String action ){
 		def sshCommandLine="ssh ${sshOption} jenkins_worker@${s}"
 		println "${sshCommandLine} sudo service ${api} ${action}" 
 		try{
-			sh "${sshCommandLine} sudo service ${api} ${action}"
+			//sh "${sshCommandLine} sudo service ${api} ${action}"
 			result ='Success'
 			ActionOnSingleApiResult = ActionOnSingleApiResult + " " + api + " " + s + "-"+ result + "\n"
 		}catch(Exception e) 
