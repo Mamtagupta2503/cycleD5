@@ -432,12 +432,12 @@ def ActionOnSOMMS(Object server, Object microservices, String action ){
 				//sh "${sshCommandLine} /apps/SOML/microservices/${ms}/${action}.sh"
 				//sh "${sshCommandLine} bash -s; /apps/SOML/microservices/${ms}/${action}.sh"
 				result ='Success'
-				ActionOnSOMMSResult = ActionOnSOMMSResult + " " + a + " " + s + "-"+ result + "\n"
+				ActionOnSOMMSResult = ActionOnSOMMSResult + " " + ms + " " + s + "-"+ result + "\n"
 			}catch(Exception e) 
 			{
 				println "******** ERROR ********"+e
 				result ='Failure'
-				ActionOnSOMMSResult = ActionOnSOMMSResult + " " + a + " " + s + "-"+ result + "\n"
+				ActionOnSOMMSResult = ActionOnSOMMSResult + " " + ms + " " + s + "-"+ result + "\n"
 				catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
 				{
 				sh "exit 1"
