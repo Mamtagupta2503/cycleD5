@@ -191,7 +191,7 @@ pipeline {
                             {
                                 println "******** ERROR ********"+e
                                 SOMLUIResult ='Failure'
-								publishresults = publishresults + "SOM" + SOMLUIResult+ "\n"
+								publishresults = publishresults + "SOMLUI" + SOMLUIResult+ "\n"
                                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
 								{
                                     sh "exit 1"
@@ -203,13 +203,13 @@ pipeline {
 				stage('Application: SOM') {
                     when {
                         expression {
-                            application.contains("SOM")
+                            application.contains("SOM-APP")
                             }
                         }
                     steps {
                         script{
                             try{
-                                println "Performing "+ action +" on application SOM"
+                                println "Performing "+ action +" on application SOM-APP"
                                 def serverdetails = readJSON file: 'SOM.json'
 								def somServer = serverdetails.SOM_SERVERS
 																
@@ -220,7 +220,7 @@ pipeline {
                             {
                                 println "******** ERROR ********"+e
                                 SOMResult ='Failure'
-								publishresults = publishresults + "SOM" + SOMResult+ "\n"
+								publishresults = publishresults + "SOM-APP" + SOMResult+ "\n"
                                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
 								{
                                     sh "exit 1"
@@ -250,7 +250,7 @@ pipeline {
                             {
                                 println "******** ERROR ********"+e
                                 SOMMSResult ='Failure'
-								publishresults = publishresults + "SOM" + SOMMSResult+ "\n"
+								publishresults = publishresults + "SOM-Microservices" + SOMMSResult+ "\n"
                                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') 
 								{
                                     sh "exit 1"
