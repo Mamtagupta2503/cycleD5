@@ -13,7 +13,7 @@ pipeline {
 				stage('Application: api-mobilehandofftoken') {
                     when {
                         expression {
-                            application.contains("api-mobilehandofftoken")
+                            application.contains("api-mobilehandofftoken") || application.contains("ALL")
                             }
                         }
                     steps {
@@ -48,7 +48,7 @@ pipeline {
                 stage('Application: Serviceability') {
                     when {
                         expression {
-                  			application.contains("Serviceability")
+							application.contains("Serviceability")|| application.contains("ALL")
                         }
                     }
                     steps {
@@ -81,7 +81,7 @@ pipeline {
                 stage('Application: Smartsheet') {
                     when {
                         expression {
-                            application.contains("Smartsheet")
+                            application.contains("Smartsheet")|| application.contains("ALL")
                         }
                     }
                     steps {
@@ -112,7 +112,7 @@ pipeline {
                 stage('Application: ServiceRouter') {
                     when {
                         expression {
-                            application.contains("ServiceRouter")
+                            application.contains("ServiceRouter")|| application.contains("ALL")
                         }
                         }
                     steps {
@@ -145,7 +145,7 @@ pipeline {
  				stage('Application: haproxy') {
                     when {
                         expression {
-                            application.contains("haproxy")
+                            application.contains("haproxy")|| application.contains("ALL")
                             }
                         }
                     steps {
@@ -174,7 +174,7 @@ pipeline {
 				stage('Application: SOMLUI') {
                     when {
                         expression {
-                            application.contains("SOMLUI")
+                            application.contains("SOMLUI")|| application.contains("ALL")
                             }
                         }
                     steps {
@@ -203,7 +203,7 @@ pipeline {
 				stage('Application: SOM') {
                     when {
                         expression {
-                            application.contains("SOM-APP")
+                            application.contains("SOM-APP")|| application.contains("ALL")
                             }
                         }
                     steps {
@@ -232,7 +232,7 @@ pipeline {
 				stage('Application: SOM-Microservices') {
                     when {
                         expression {
-                            application.contains("SOM-MS")
+                            application.contains("SOM-MS")|| application.contains("ALL")
                             }
                         }
                     steps {
@@ -262,7 +262,7 @@ pipeline {
 				stage('Application: Phantom') {
                     when {
                         expression {
-                            application.contains("Phantom")
+                            application.contains("Phantom")|| application.contains("ALL")
                             }
                         }
                     steps {
