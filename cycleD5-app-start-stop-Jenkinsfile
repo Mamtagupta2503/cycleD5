@@ -1,5 +1,7 @@
 def action =params.Action
 def application =params.Application
+def serverFromParam=params.server
+def apiFromParam=params.api
 def publishresults='' 
 def cause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
 
@@ -22,7 +24,11 @@ pipeline {
                                 println "Performing "+ action +" on application api-mobilehandofftoken"
                                 def serverdetails = readJSON file: 'api-mobilehandofftoken.json'
 								def server = serverdetails.SERVERS
+								def serverFromParamArray = Arrays.asList((serverFromParam).split(","))
 								
+								if(application.contains("api-mobilehandofftoken")) {
+									server =serverFromParamArray
+								}
 								//calling ActionOnSingleApi method to perform action on api-config-server
 								def apiConfigResult = ActionOnSingleApi(server,'config-server',action)
 								//storing the results in single variable
@@ -58,6 +64,13 @@ pipeline {
                                 def serverdetails = readJSON file: 'Serviceability.json'
 								def sali_Server = serverdetails.SALI_SERVERS
 								def api = serverdetails.SALI_API
+								def serverFromParamArray = Arrays.asList((serverFromParam).split(","))
+								def apiFromParamArray =Arrays.asList((apiFromParam).split(","))
+								
+								if(application.contains("Serviceability")) {
+									sali_Server =serverFromParamArray
+									api =apiFromParamArray
+								}
 								
 								//calling ActionOnMultpileApi method to perform action on all sali api's 
 								def SaliResult = ActionOnMultpileApi(sali_Server,api,action)
@@ -91,6 +104,13 @@ pipeline {
                                 def serverdetails = readJSON file: 'Smartsheet.json'
                                 def smartsheet_Server = serverdetails.SMARTSHEET_SERVERS
 								def api = serverdetails.SMARTSHEET_API
+								def serverFromParamArray = Arrays.asList((serverFromParam).split(","))
+								def apiFromParamArray =Arrays.asList((apiFromParam).split(","))
+								
+								if(application.contains("Smartsheet")) {
+									smartsheet_Server =serverFromParamArray
+									api =apiFromParamArray
+								}
 								
 								//calling ActionOnMultpileApi method to perform action on all Smartsheet api's 
 								def SmartsheetResult = ActionOnMultpileApi(smartsheet_Server,api,action)
@@ -121,6 +141,13 @@ pipeline {
                                 println "Performing "+ action +" on application ServiceRouter"
                                 def serverdetails = readJSON file: 'ServiceRouter.json'
 								def sr_Server = serverdetails.SR_SERVERS
+								
+								def serverFromParamArray = Arrays.asList((serverFromParam).split(","))
+								
+								if(application.contains("ServiceRouter")) {
+									sr_Server =serverFromParamArray
+								}
+								
 								
 								//calling ActionOnMultpileApi method to perform action on SplunkForwarder 
 								def splunkdResult = ActionOnSingleApi(sr_Server,'SplunkForwarder',action)
@@ -153,9 +180,14 @@ pipeline {
                             try{
                                 println "Performing "+ action +" on application haproxy"
                                 def serverdetails = readJSON file: 'haproxy.json'
-								def haproxyServers = serverdetails.HAPROXY_SERVERS
+								def haproxy_servers = serverdetails.HAPROXY_SERVERS
+								def serverFromParamArray = Arrays.asList((serverFromParam).split(","))
 								
-								def haproxyResult = ActionOnSingleApi(haproxyServers,'haproxy',action)
+								if(application.contains("haproxy")) {
+									haproxy_servers =serverFromParamArray
+								}
+								
+								def haproxyResult = ActionOnSingleApi(haproxy_servers,'haproxy',action)
 								publishresults = publishresults + haproxyResult
 
                             }catch(Exception e) 
@@ -182,9 +214,15 @@ pipeline {
                             try{
                                 println "Performing "+ action +" on application SOMLUI"
                                 def serverdetails = readJSON file: 'SOM.json'
-								def somServer = serverdetails.SOM_SERVERS
+								def som_servers = serverdetails.SOM_SERVERS
 																
-								def SOMLUIResult =ActionOnSOMLUI(somServer,action)
+								def serverFromParamArray = Arrays.asList((serverFromParam).split(","))
+								
+								if(application.contains("SOMLUI")) {
+									som_servers =serverFromParamArray
+								}
+								
+								def SOMLUIResult =ActionOnSOMLUI(som_servers,action)
 								publishresults = publishresults + SOMLUIResult
 								
                             }catch(Exception e) 
@@ -211,9 +249,14 @@ pipeline {
                             try{
                                 println "Performing "+ action +" on application SOM-APP"
                                 def serverdetails = readJSON file: 'SOM.json'
-								def somServer = serverdetails.SOM_SERVERS
+								def som_servers = serverdetails.SOM_SERVERS
+								def serverFromParamArray = Arrays.asList((serverFromParam).split(","))
+								
+								if(application.contains("SOM-APP")) {
+									som_servers =serverFromParamArray
+								}
 																
-								def SOMResult =ActionOnSOM(somServer,action)
+								def SOMResult =ActionOnSOM(som_servers,action)
 								publishresults = publishresults + SOMResult
 								
                             }catch(Exception e) 
@@ -240,10 +283,16 @@ pipeline {
                             try{
                                 println "Performing "+ action +" on application SOM-MS"
                                 def serverdetails = readJSON file: 'SOM.json'
-								def somServer = serverdetails.SOM_SERVERS
+								def som_servers = serverdetails.SOM_SERVERS
 								def somMicroservices =serverdetails.SOM_API
+								def serverFromParamArray = Arrays.asList((serverFromParam).split(","))
+								def apiFromParamArray =Arrays.asList((apiFromParam).split(","))
+								if(application.contains("SOM-MS")) {
+									som_servers =serverFromParamArray
+									api =apiFromParamArray
+								}
 																
-								def SOMMSResult =ActionOnSOMMS(somServer,somMicroservices,action)
+								def SOMMSResult =ActionOnSOMMS(som_servers,somMicroservices,action)
 								publishresults = publishresults + SOMMSResult
 								
                             }catch(Exception e) 
@@ -270,10 +319,14 @@ pipeline {
                             try{
                                 println "Performing "+ action +" on application Phantom"
                                 def serverdetails = readJSON file: 'Phantom.json'
-				def PhantomServer = serverdetails.PHANTOM_SERVERS
+								def PhantomServer = serverdetails.PHANTOM_SERVERS
+								def serverFromParamArray = Arrays.asList((serverFromParam).split(","))
+								if(application.contains("Phantom")) {
+									som_servers =serverFromParamArray
+								}
 								
-				def PhantomResult =ActionOnPhantom(PhantomServer,action)
-				publishresults = publishresults + PhantomResult
+								def PhantomResult =ActionOnPhantom(PhantomServer,action)
+								publishresults = publishresults + PhantomResult
 								
                             }catch(Exception e) 
                             {
